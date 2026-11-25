@@ -1,8 +1,9 @@
 """Joins the data parts into alerts.jsonl and makes the fixed dev/test split.
 
 All alerts of one rule.id go to the same split, so test is not a near-copy of dev.
-Whole groups are assigned greedily so that each (provenance, label) count is close
-to the target share in both splits.
+Whole groups are assigned greedily so that each (provenance, group type, label) count is
+close to the target share in both splits. Group type matters: some rules only ever carry one
+label and others carry both. Without it, all mixed rules landed in test (see EXPERIMENT_LOG.md).
 """
 import json
 import random
@@ -15,11 +16,21 @@ def group_key(alert: dict) -> str:
     return f"{alert['provenance']}:{alert['wazuh']['rule']['id']}"
 
 
+def group_type(members: list[dict]) -> str:
+    """'tp', 'fp', or 'mixed' when the rule carries both labels."""
+    labels = {a["label"] for a in members}
+    return labels.pop() if len(labels) == 1 else "mixed"
+
+
 def make_splits(alerts: list[dict], test_fraction: float, seed: int) -> dict[str, list[str]]:
     groups = defaultdict(list)
     for a in alerts:
         groups[group_key(a)].append(a)
-    cell = lambda a: (a["provenance"], a["label"])                    # noqa: E731
+    kind = {key: group_type(members) for key, members in groups.items()}
+
+    def cell(a):
+        return a["provenance"], kind[group_key(a)], a["label"]
+
     target = {c: n * test_fraction for c, n in Counter(map(cell, alerts)).items()}
 
     order = sorted(groups)

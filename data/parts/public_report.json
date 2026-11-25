@@ -1,0 +1,98 @@
+{
+  "fox": {
+    "attacker_ip": "172.17.130.196",
+    "attacker_share": 1.0,
+    "total": 462523,
+    "usable fp": 9707,
+    "dropped: exact duplicate text": 16875,
+    "dropped: suricata": 22168,
+    "excluded: attacker IP outside windows": 16,
+    "excluded: within margin of a window": 2203,
+    "excluded: in window, not attributable to attacker": 911,
+    "usable tp": 410643
+  },
+  "harrison": {
+    "attacker_ip": "10.237.1.238",
+    "attacker_share": 1.0,
+    "total": 583754,
+    "dropped: suricata": 134795,
+    "usable fp": 10620,
+    "dropped: exact duplicate text": 19553,
+    "excluded: attacker IP outside windows": 63,
+    "excluded: within margin of a window": 1247,
+    "excluded: in window, not attributable to attacker": 2060,
+    "usable tp": 415416
+  },
+  "russellmitchell": {
+    "attacker_ip": "172.19.131.174",
+    "attacker_share": 1.0,
+    "total": 41488,
+    "usable fp": 5165,
+    "dropped: suricata": 18372,
+    "dropped: exact duplicate text": 9001,
+    "excluded: attacker IP outside windows": 6,
+    "excluded: within margin of a window": 833,
+    "excluded: in window, not attributable to attacker": 434,
+    "usable tp": 7677
+  },
+  "santos": {
+    "attacker_ip": "172.21.128.119",
+    "attacker_share": 1.0,
+    "total": 126513,
+    "dropped: suricata": 88224,
+    "usable fp": 9577,
+    "dropped: exact duplicate text": 17887,
+    "excluded: attacker IP outside windows": 15,
+    "excluded: within margin of a window": 2071,
+    "excluded: in window, not attributable to attacker": 989,
+    "usable tp": 7750
+  },
+  "shaw": {
+    "attacker_ip": "172.24.249.224",
+    "attacker_share": 1.0,
+    "total": 68539,
+    "usable fp": 10486,
+    "dropped: suricata": 33400,
+    "dropped: exact duplicate text": 18348,
+    "excluded: attacker IP outside windows": 18,
+    "excluded: within margin of a window": 729,
+    "excluded: in window, not attributable to attacker": 359,
+    "usable tp": 5199
+  },
+  "wardbeck": {
+    "attacker_ip": "10.132.56.81",
+    "attacker_share": 1.0,
+    "total": 88204,
+    "usable fp": 11422,
+    "dropped: exact duplicate text": 20631,
+    "dropped: suricata": 49020,
+    "excluded: attacker IP outside windows": 76,
+    "excluded: within margin of a window": 1403,
+    "excluded: in window, not attributable to attacker": 428,
+    "usable tp": 5224
+  },
+  "wheeler": {
+    "attacker_ip": "10.38.243.125",
+    "attacker_share": 1.0,
+    "total": 603939,
+    "usable fp": 15538,
+    "dropped: exact duplicate text": 28861,
+    "dropped: suricata": 137303,
+    "excluded: attacker IP outside windows": 2,
+    "excluded: within margin of a window": 2639,
+    "excluded: in window, not attributable to attacker": 272,
+    "usable tp": 419324
+  },
+  "wilson": {
+    "attacker_ip": "10.182.193.78",
+    "attacker_share": 1.0,
+    "total": 625303,
+    "usable fp": 21152,
+    "dropped: exact duplicate text": 39935,
+    "dropped: suricata": 130076,
+    "excluded: attacker IP outside windows": 111,
+    "excluded: within margin of a window": 5242,
+    "excluded: in window, not attributable to attacker": 1842,
+    "usable tp": 426945
+  }
+}

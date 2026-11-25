@@ -89,3 +89,33 @@ If a rule is almost always one label, few rules decide the split balance. To mea
 
 - 64 tests passed with the system Python 3.12.1, with `statsmodels` replaced by a stub because it was not
   installed yet; `test_clopper_pearson_known_value` was deselected for that reason. To be rerun in the venv.
+
+## 2026-11-25: repo, dependencies, AIT-ADS
+
+- Private repo `Warisha-Shaukat/soc-triage` created; the first device sign-in code expired unused, the second worked.
+- AIT-ADS download completed on resume attempt 4. MD5 of both files matches Zenodo; `unzip -t` found no errors.
+  sha256 `ait_ads.zip` 9f0595c4ebe56ac9223763881f55369dd4f249a8108064e4ae108eb3309aeeb9.
+- The eight `_wazuh.json` files hold 2,600,263 alerts = 2,293,628 (Wazuh) + 306,635 (Suricata) as published.
+  The loader dropped 613,358 as Suricata, about twice the published number, consistent with each Suricata alert
+  being ingested twice (decoders `json` and `snort`). Counts per scenario: `data/parts/public_report.json`.
+- Two loader runs (system Python, venv) gave byte-identical `public.jsonl`: 240 alerts, 120 tp and 120 fp.
+- Exact-text deduplication removes little, because log lines contain timestamps. Near-duplicates are limited by the
+  per-rule cap (round-robin sampling) and by grouping the split on rule.id.
+- Dependencies installed and pinned (`requirements.txt`). 65 tests passed in the venv with real `statsmodels`.
+
+## 2026-11-25: FAILURE and fix: first dev/test split was lopsided
+
+- First split: stratified by provenance and label only. Every public rule in dev had a single label, and every
+  public rule carrying both labels was in test (rules 31101, 5402, 5502, 5501, 31122, 31509, 5403; also 5503, fp only).
+  Cause: groups are placed biggest first, and mixed groups are bigger. Dev would have been solvable from rule.id.
+- Found by reading rule/label counts per split before any model run. Public test alert text was not read for this.
+- Fix: stratify on group type (tp, fp, mixed) too; regression test added (66 tests pass).
+- New split: dev 209 (public 61 tp / 64 fp, synthetic 41 / 43), test 199 (public 59 / 56, synthetic 43 / 41).
+- Consequence: while checking the first split, up to two log lines per (rule, label) of its dev part were printed.
+  Some of those rules (9701, 9705, 31151, 31516, 31104, 5551, 5304) are now in test. The prompt and guard were
+  written before that and not changed after.
+
+## 2026-11-25: inferred attacker IP checked
+
+- See the numbers in `data/labeling_rule.md`: the address is probably a shared gateway, but Wazuh alerts from it are
+  almost all inside attack windows (2 to 116 outside, 5,189 to 426,943 inside, per scenario).

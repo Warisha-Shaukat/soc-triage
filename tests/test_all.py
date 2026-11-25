@@ -189,6 +189,18 @@ def test_splits_disjoint_stratified_grouped_reproducible():
         assert 0.4 <= share <= 0.6
 
 
+def test_mixed_and_single_label_rules_reach_both_splits():
+    def make(rule, labels):
+        return [{"id": f"{rule}-{i}", "provenance": "public", "label": lab, "wazuh": {"rule": {"id": rule}}}
+                for i, lab in enumerate(labels)]
+    # Mixed groups are bigger, which is what broke the first version of the split.
+    alerts = [a for n in range(6) for a in make(f"mix{n}", ["tp", "fp"] * 8)]
+    alerts += [a for n in range(6) for lab in ("tp", "fp") for a in make(f"{lab}{n}", [lab] * 8)]
+    s = make_splits(alerts, 0.5, 1)
+    for ids in s.values():
+        assert {i.rstrip("0123456789").rstrip("-").rstrip("0123456789") for i in ids} == {"mix", "tp", "fp"}
+
+
 def test_public_label_rule():
     windows = [("dirb", 10_000.0, 10_100.0), ("privilege_escalation", 20_000.0, 20_030.0)]
 

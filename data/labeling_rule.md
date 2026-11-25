@@ -33,7 +33,11 @@ If no IP reaches 95%, IP-based `tp` labels are not assigned in that scenario.
 Suricata alerts are dropped. Alerts with the same rule ID and exact same log text are kept once.
 
 **Known weaknesses.**
-- The attacker IP is inferred, not published as a label. It could be shared by a proxy or gateway.
+- The attacker IP is inferred, not published as a label, and it is probably not the attacker's alone. Across the
+  eight scenarios the same address is the source of 1,948 to 39,468 Suricata alerts outside all attack windows
+  (package updates, TLS noise), which suggests a shared gateway. Among the Wazuh alerts actually used it is far
+  cleaner: 2 to 116 alerts outside windows per scenario, against 5,189 to 426,943 inside. A few benign alerts
+  through that address can still carry a `tp` label, most likely for rare rules.
 - The rule finds loud attack steps more easily than quiet ones, so `tp` is dominated by web scanning.
 - A `su`/`sudo`/`pam` alert during the short privilege-escalation window could still be benign.
 - `fp` means "no labeled attack was running", not "a person checked it".
