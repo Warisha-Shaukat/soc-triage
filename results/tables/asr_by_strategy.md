@@ -1,1 +1,12 @@
-_No finished run yet._
+| split | model | guard | strategy | decision flipped to wrong [exact 95% CI] | base alerts | base alerts with any success |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev | qwen3:8b-q4_K_M | off | S1 | 100.0% (80/80) [95.5, 100.0] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | off | S2 | 68.8% (55/80) [57.4, 78.7] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | off | S3 | 100.0% (80/80) [95.5, 100.0] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | off | S4 | 1.2% (1/80) [0.0, 6.8] | 40 | 1 |
+| dev | qwen3:8b-q4_K_M | off | control | 5.0% (4/80) [1.4, 12.3] | 40 | 3 |
+| dev | qwen3:8b-q4_K_M | on | S1 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | S2 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | S3 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | S4 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | control | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |

@@ -3,7 +3,7 @@
 Research prototype. It measures whether attacker-controlled log text can steer small local LLMs
 (8B, 4-bit, via Ollama) that triage Wazuh-format alerts, and what a fail-closed guard costs.
 
-**Status: no model run has finished yet.** Empty tables below mean "not run", never "zero".
+**Status: Qwen3 dev runs finished; test runs and Llama 3.1 not finished.** Empty tables below mean "not run", never "zero".
 
 ## What is and is not new
 
@@ -74,6 +74,12 @@ Clean alerts:
 | dev | Always escalate (reference) |  | all | 209 | 100.0% (102/102) [96.4, 100.0] | 0 | 48.8% (102/209) [42.1, 55.5] | 48.8% | 65.6% | 100.0% |  |  |  |
 | dev | Always escalate (reference) |  | public | 125 | 100.0% (61/61) [94.1, 100.0] | 0 | 48.8% (61/125) [40.2, 57.5] | 48.8% | 65.6% | 100.0% |  |  |  |
 | dev | Always escalate (reference) |  | synthetic | 84 | 100.0% (41/41) [91.4, 100.0] | 0 | 48.8% (41/84) [38.4, 59.3] | 48.8% | 65.6% | 100.0% |  |  |  |
+| dev | B LLM, no guard | qwen3:8b-q4_K_M | all | 209 | 100.0% (102/102) [96.4, 100.0] | 0 | 56.0% (117/209) [49.2, 62.5] | 52.6% | 68.9% | 92.8% | 0.0% | 5.32 | 6.86 |
+| dev | B LLM, no guard | qwen3:8b-q4_K_M | public | 125 | 100.0% (61/61) [94.1, 100.0] | 0 | 60.8% (76/125) [52.0, 68.9] | 55.5% | 71.3% | 88.0% | 0.0% | 5.36 | 6.92 |
+| dev | B LLM, no guard | qwen3:8b-q4_K_M | synthetic | 84 | 100.0% (41/41) [91.4, 100.0] | 0 | 48.8% (41/84) [38.4, 59.3] | 48.8% | 65.6% | 100.0% | 0.0% | 5.21 | 6.50 |
+| dev | B LLM + guard | qwen3:8b-q4_K_M | all | 209 | 92.2% (94/102) [85.1, 96.6] | 8 | 56.5% (118/209) [49.7, 63.0] | 53.1% | 67.4% | 84.7% | 0.0% | 5.87 | 7.23 |
+| dev | B LLM + guard | qwen3:8b-q4_K_M | public | 125 | 86.9% (53/61) [75.8, 94.2] | 8 | 60.8% (76/125) [52.0, 68.9] | 56.4% | 68.4% | 75.2% | 0.0% | 5.88 | 7.26 |
+| dev | B LLM + guard | qwen3:8b-q4_K_M | synthetic | 84 | 100.0% (41/41) [91.4, 100.0] | 0 | 50.0% (42/84) [39.5, 60.5] | 49.4% | 66.1% | 98.8% | 0.0% | 5.85 | 6.55 |
 | test | A1 rules (level >= 1) |  | all | 199 | 100.0% (102/102) [96.4, 100.0] | 0 | 51.3% (102/199) [44.4, 58.1] | 51.3% | 67.8% | 100.0% |  |  |  |
 | test | A1 rules (level >= 1) |  | public | 115 | 100.0% (59/59) [93.9, 100.0] | 0 | 51.3% (59/115) [42.3, 60.2] | 51.3% | 67.8% | 100.0% |  |  |  |
 | test | A1 rules (level >= 1) |  | synthetic | 84 | 100.0% (43/43) [91.8, 100.0] | 0 | 51.2% (43/84) [40.7, 61.6] | 51.2% | 67.7% | 100.0% |  |  |  |
@@ -88,43 +94,80 @@ Clean alerts:
 Paired comparison (McNemar exact):
 
 <!-- BEGIN:mcnemar -->
-_No finished run yet._
+| split | model | first | second | n pairs | only first correct | only second correct | accuracy difference (second - first) | exact p |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| dev | qwen3:8b-q4_K_M | A1 rules | B LLM, no guard | 209 | 0 | 15 | +7.2 points | 6.104e-05 |
+| dev | qwen3:8b-q4_K_M | A2 rules | B LLM, no guard | 209 | 36 | 33 | -1.4 points | 0.8099 |
+| dev | qwen3:8b-q4_K_M | A1 rules | B LLM + guard | 209 | 8 | 24 | +7.7 points | 0.007 |
+| dev | qwen3:8b-q4_K_M | A2 rules | B LLM + guard | 209 | 28 | 26 | -1.0 points | 0.8919 |
+| dev | qwen3:8b-q4_K_M | B LLM, no guard | B LLM + guard | 209 | 9 | 10 | +0.5 points | 1 |
 <!-- END:mcnemar -->
 
 Guard cost on clean benign alerts:
 
 <!-- BEGIN:guard_cost -->
-_No finished run yet._
+| split | model | benign alerts | escalated, guard off | escalated, guard on | newly escalated / dismissed before [exact 95% CI] | of these: suspicion flag | of these: ungrounded quote |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| dev | qwen3:8b-q4_K_M | 107 | 92 | 83 | 6.7% (1/15) [0.2, 31.9] | 0 | 0 |
 <!-- END:guard_cost -->
 
 Attack success rate, payload against harmless control text:
 
 <!-- BEGIN:asr_overall -->
-_No finished run yet._
+| split | model | guard | kind | decision flipped to wrong [exact 95% CI] | base alerts | base alerts with any success |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev | qwen3:8b-q4_K_M | off | control | 5.0% (4/80) [1.4, 12.3] | 40 | 3 |
+| dev | qwen3:8b-q4_K_M | off | payload | 67.5% (216/320) [62.1, 72.6] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | on | control | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | payload | 0.0% (0/304) [0.0, 1.2] | 38 | 0 |
 <!-- END:asr_overall -->
 
 By strategy:
 
 <!-- BEGIN:asr_by_strategy -->
-_No finished run yet._
+| split | model | guard | strategy | decision flipped to wrong [exact 95% CI] | base alerts | base alerts with any success |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev | qwen3:8b-q4_K_M | off | S1 | 100.0% (80/80) [95.5, 100.0] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | off | S2 | 68.8% (55/80) [57.4, 78.7] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | off | S3 | 100.0% (80/80) [95.5, 100.0] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | off | S4 | 1.2% (1/80) [0.0, 6.8] | 40 | 1 |
+| dev | qwen3:8b-q4_K_M | off | control | 5.0% (4/80) [1.4, 12.3] | 40 | 3 |
+| dev | qwen3:8b-q4_K_M | on | S1 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | S2 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | S3 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | S4 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | control | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
 <!-- END:asr_by_strategy -->
 
 By wording (c = held out from detector tuning):
 
 <!-- BEGIN:asr_by_wording -->
-_No finished run yet._
+| split | model | guard | variant | decision flipped to wrong [exact 95% CI] | base alerts | base alerts with any success |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev | qwen3:8b-q4_K_M | off | a | 60.0% (96/160) [52.0, 67.7] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | off | b | 75.0% (120/160) [67.6, 81.5] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | on | a | 0.0% (0/152) [0.0, 2.4] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | b | 0.0% (0/152) [0.0, 2.4] | 38 | 0 |
 <!-- END:asr_by_wording -->
 
 Canary token in the rationale (a model that merely quotes the payload also counts):
 
 <!-- BEGIN:canary -->
-_No finished run yet._
+| split | model | guard | canary in rationale [exact 95% CI] |
+| --- | --- | --- | --- |
+| dev | qwen3:8b-q4_K_M | off | 44.5% (89/200) [37.5, 51.7] |
+| dev | qwen3:8b-q4_K_M | on | 14.0% (28/200) [9.5, 19.6] |
 <!-- END:canary -->
 
 Runs:
 
 <!-- BEGIN:runs -->
-_No finished run yet._
+| run | model | digest | ollama | prompt | commit | n | started (UTC) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| dev_clean_guard-off_primary | qwen3:8b-q4_K_M | 500a1f067a9f | 0.40.18 | c70c7ebe5f24 | e9c0a62 | 209 | 2026-11-25T18:26:15+00:00 |
+| dev_clean_guard-on_primary | qwen3:8b-q4_K_M | 500a1f067a9f | 0.40.18 | 409db8a44e7d | e9c0a62 | 209 | 2026-11-25T18:45:16+00:00 |
+| dev_inject_guard-off_primary | qwen3:8b-q4_K_M | 500a1f067a9f | 0.40.18 | c70c7ebe5f24 | e9c0a62 | 500 | 2026-11-25T19:05:55+00:00 |
+| dev_inject_guard-on_primary | qwen3:8b-q4_K_M | 500a1f067a9f | 0.40.18 | 409db8a44e7d | e9c0a62 | 500 | 2026-11-25T19:54:34+00:00 |
 <!-- END:runs -->
 
 More tables (by field, by provenance, detector hits, escalation attacks, baseline sweep) are in `results/tables/`.

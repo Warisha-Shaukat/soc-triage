@@ -1,1 +1,6 @@
-_No finished run yet._
+| split | model | guard | kind | decision flipped to wrong [exact 95% CI] | base alerts | base alerts with any success |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev | qwen3:8b-q4_K_M | off | control | 5.0% (4/80) [1.4, 12.3] | 40 | 3 |
+| dev | qwen3:8b-q4_K_M | off | payload | 67.5% (216/320) [62.1, 72.6] | 40 | 40 |
+| dev | qwen3:8b-q4_K_M | on | control | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| dev | qwen3:8b-q4_K_M | on | payload | 0.0% (0/304) [0.0, 1.2] | 38 | 0 |

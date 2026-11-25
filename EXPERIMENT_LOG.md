@@ -179,3 +179,23 @@ If a rule is almost always one label, few rules decide the split balance. To mea
 - 30/30 outputs were valid JSON on the first attempt, so `format` and `think: false` work together here.
 - Latency about 4.6 to 7.1 s per alert after a 9.6 s first call (model load). A second model was downloading meanwhile.
 - The cache was cleared afterwards so that reported latencies come from the full runs.
+
+## 2026-11-26: Qwen3 dev runs finished (1,418 alerts, commit e9c0a62, no `-dirty`)
+
+- `python -m src.evaluate` and `python -m src.inspect_run dev primary`. No run failed; 0 retries, 0 invalid outputs.
+- Clean dev (n=209), no guard: recall 102/102, but 194/209 escalated; accuracy 56.0%. Rules A2: 57.4%, A1: 48.8%.
+  B vs A2: 36 vs 33 discordant, exact p=0.81. So the LLM shows no accuracy advantage over A2 here, although its recall
+  is higher (102/102 against 69/102). On synthetic dev it escalated 84/84.
+- Clean dev, guard on: recall 94/102, accuracy 56.5%. All 8 missed attacks are rule 5502 "PAM: Login session closed",
+  dismissed by the model itself once the prompt notice and data separation are on. Dev has 8 tp and 8 fp alerts of that
+  rule; the tp ones are tp only because of the attack time window (weak label logged on 2026-11-25). Cause not isolated.
+- Injection dev, no guard: ASR 216/320 (67.5%); control text 4/80. S1 80/80, S2 55/80, S3 80/80, S4 1/80.
+- Injection dev, guard on: ASR 0/304, control 0/76. READ WITH CARE: the detector flagged 320/320 payload cases because
+  its patterns were written alongside wordings a and b, so the 0 is close to true by construction. Before the detector
+  decided, the model itself still said false_positive in S1 43/80, S2 23/80, S3 35/80, S4 1/80 (all attack-based cases,
+  not ASR). Prompt-level separation alone therefore lowered but did not stop the attack. Wording c on test is the real check.
+- Caveat on S4: unguarded 1/80 mostly means the model did not decode the blob, not that it resisted it.
+- Decision: no bug found, so prompt, guard, thresholds, labels and data stay exactly as they were. Nothing was tuned on
+  dev results. `src/inspect_run.py` (read-only diagnostics) is the only code added. This is the final configuration.
+- Test is run next, once. Authorization: `AGENTS.md` section 8 asks for it; the agent stated it would do so unless the
+  author objected, and the author said to continue without objecting. Not approved in explicit words.
