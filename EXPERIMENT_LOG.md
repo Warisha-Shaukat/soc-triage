@@ -119,3 +119,14 @@ If a rule is almost always one label, few rules decide the split balance. To mea
 
 - See the numbers in `data/labeling_rule.md`: the address is probably a shared gateway, but Wazuh alerts from it are
   almost all inside attack windows (2 to 116 outside, 5,189 to 426,943 inside, per scenario).
+
+## 2026-11-25: baseline on dev is degenerate (no model run yet)
+
+- `python -m src.evaluate` ran with 0 model runs and wrote 14 tables; model tables are empty.
+- On dev (n=209), the F1-optimal threshold is level >= 1, the same as always escalating: recall 100.0%,
+  accuracy 48.8%, F1 65.6%. Best accuracy is at level >= 4: recall 67.6%, precision 55.2%, accuracy 57.4%.
+- Likely causes, both choices made in this repo: the synthetic generator decouples level from label on purpose,
+  and round-robin sampling over rules flattens AIT-ADS, where attack alerts are mostly a few web rules.
+  So this baseline is weaker here than it may be on naturally distributed alerts.
+- Objective left as specified (F1). Any change is an evaluation-design decision for the author.
+- Test-split baseline rows exist in the generated table. Only dev rows were read when writing this entry.

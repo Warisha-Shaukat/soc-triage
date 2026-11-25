@@ -47,6 +47,12 @@ command with `--split test`; a finished run is refused a second time unless `--r
 ## Data
 
 <!-- BEGIN:data -->
+| split | provenance | alerts | tp | fp | distinct rules |
+| --- | --- | --- | --- | --- | --- |
+| dev | public | 125 | 61 | 64 | 13 |
+| dev | synthetic | 84 | 41 | 43 | 12 |
+| test | public | 115 | 59 | 56 | 11 |
+| test | synthetic | 84 | 43 | 41 | 12 |
 <!-- END:data -->
 
 ## Results
@@ -54,41 +60,62 @@ command with `--split test`; a finished run is refused a second time unless `--r
 Clean alerts:
 
 <!-- BEGIN:conditions -->
+| split | condition | model | provenance | n | recall on tp [exact 95% CI] | missed attacks | accuracy [Wilson 95% CI] | precision | F1 | escalation rate | invalid output | latency p50 s | latency p95 s |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| dev | A rules (level >= 1) |  | all | 209 | 100.0% (102/102) [96.4, 100.0] | 0 | 48.8% (102/209) [42.1, 55.5] | 48.8% | 65.6% | 100.0% |  |  |  |
+| dev | A rules (level >= 1) |  | public | 125 | 100.0% (61/61) [94.1, 100.0] | 0 | 48.8% (61/125) [40.2, 57.5] | 48.8% | 65.6% | 100.0% |  |  |  |
+| dev | A rules (level >= 1) |  | synthetic | 84 | 100.0% (41/41) [91.4, 100.0] | 0 | 48.8% (41/84) [38.4, 59.3] | 48.8% | 65.6% | 100.0% |  |  |  |
+| dev | Always escalate (reference) |  | all | 209 | 100.0% (102/102) [96.4, 100.0] | 0 | 48.8% (102/209) [42.1, 55.5] | 48.8% | 65.6% | 100.0% |  |  |  |
+| dev | Always escalate (reference) |  | public | 125 | 100.0% (61/61) [94.1, 100.0] | 0 | 48.8% (61/125) [40.2, 57.5] | 48.8% | 65.6% | 100.0% |  |  |  |
+| dev | Always escalate (reference) |  | synthetic | 84 | 100.0% (41/41) [91.4, 100.0] | 0 | 48.8% (41/84) [38.4, 59.3] | 48.8% | 65.6% | 100.0% |  |  |  |
+| test | A rules (level >= 1) |  | all | 199 | 100.0% (102/102) [96.4, 100.0] | 0 | 51.3% (102/199) [44.4, 58.1] | 51.3% | 67.8% | 100.0% |  |  |  |
+| test | A rules (level >= 1) |  | public | 115 | 100.0% (59/59) [93.9, 100.0] | 0 | 51.3% (59/115) [42.3, 60.2] | 51.3% | 67.8% | 100.0% |  |  |  |
+| test | A rules (level >= 1) |  | synthetic | 84 | 100.0% (43/43) [91.8, 100.0] | 0 | 51.2% (43/84) [40.7, 61.6] | 51.2% | 67.7% | 100.0% |  |  |  |
+| test | Always escalate (reference) |  | all | 199 | 100.0% (102/102) [96.4, 100.0] | 0 | 51.3% (102/199) [44.4, 58.1] | 51.3% | 67.8% | 100.0% |  |  |  |
+| test | Always escalate (reference) |  | public | 115 | 100.0% (59/59) [93.9, 100.0] | 0 | 51.3% (59/115) [42.3, 60.2] | 51.3% | 67.8% | 100.0% |  |  |  |
+| test | Always escalate (reference) |  | synthetic | 84 | 100.0% (43/43) [91.8, 100.0] | 0 | 51.2% (43/84) [40.7, 61.6] | 51.2% | 67.7% | 100.0% |  |  |  |
 <!-- END:conditions -->
 
 Paired comparison (McNemar exact):
 
 <!-- BEGIN:mcnemar -->
+_No finished run yet._
 <!-- END:mcnemar -->
 
 Guard cost on clean benign alerts:
 
 <!-- BEGIN:guard_cost -->
+_No finished run yet._
 <!-- END:guard_cost -->
 
 Attack success rate:
 
 <!-- BEGIN:asr_overall -->
+_No finished run yet._
 <!-- END:asr_overall -->
 
 By strategy:
 
 <!-- BEGIN:asr_by_strategy -->
+_No finished run yet._
 <!-- END:asr_by_strategy -->
 
 By wording (c = held out from detector tuning):
 
 <!-- BEGIN:asr_by_wording -->
+_No finished run yet._
 <!-- END:asr_by_wording -->
 
 Canary token in the rationale (a model that merely quotes the payload also counts):
 
 <!-- BEGIN:canary -->
+_No finished run yet._
 <!-- END:canary -->
 
 Runs:
 
 <!-- BEGIN:runs -->
+_No finished run yet._
 <!-- END:runs -->
 
 More tables (by field, by provenance, detector hits, escalation attacks, baseline sweep) are in `results/tables/`.
