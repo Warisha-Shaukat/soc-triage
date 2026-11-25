@@ -171,3 +171,11 @@ If a rule is almost always one label, few rules decide the split balance. To mea
   disagrees with any, tables are recomputed from the saved raw outputs as a separate sensitivity analysis, with no new
   model calls; injection cases whose base alert changed label are left out of it.
 - The author should fill `sheet.csv` before reading any results or `evidence.csv`.
+
+## 2026-11-25: Qwen3 smoke test (dev only, 3 x 10 alerts, not used as results)
+
+- `qwen3:8b-q4_K_M`, id 500a1f067a9f (matches the registry prefix), Ollama 0.40.18. `ollama ps`: 5.6 GB, 100% GPU,
+  context 4096; GPU memory used 5502 MiB.
+- 30/30 outputs were valid JSON on the first attempt, so `format` and `think: false` work together here.
+- Latency about 4.6 to 7.1 s per alert after a 9.6 s first call (model load). A second model was downloading meanwhile.
+- The cache was cleared afterwards so that reported latencies come from the full runs.

@@ -6,3 +6,4 @@ __pycache__/
 data/raw/
 data/attack_kb/*.json
 results/cache/
+results/raw/smoke_*
