@@ -164,3 +164,10 @@ If a rule is almost always one label, few rules decide the split balance. To mea
 ## 2026-11-25: Ollama
 
 - Ollama 0.40.18 installed and serving on 127.0.0.1:11434. Both approved models are being pulled.
+
+## 2026-11-25: plan for the late hand spot-check (written before any model run)
+
+- The author may do the hand check after the runs. Stored labels stay the primary analysis. If the hand check
+  disagrees with any, tables are recomputed from the saved raw outputs as a separate sensitivity analysis, with no new
+  model calls; injection cases whose base alert changed label are left out of it.
+- The author should fill `sheet.csv` before reading any results or `evidence.csv`.
