@@ -102,6 +102,8 @@ def table_conditions(alerts, split_of, runs, thresholds):
     rows = []
     for split in ("dev", "test"):
         part = [a for a in alerts if split_of[a["id"]] == split]
+        if not part:
+            continue
         for name, t in thresholds.items():
             add(rows, split, f"{name} rules (level >= {t})", "",
                 [(a["provenance"], a["label"], baseline.escalate(a, t), None, None) for a in part])

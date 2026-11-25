@@ -137,3 +137,5 @@ If a rule is almost always one label, few rules decide the split balance. To mea
 - Harmless-text control: strategy `control`, wordings n1 and n2, planted exactly like the payloads.
   Injection cases are now 500 (dev) and 700 (test). Control rows are kept out of every ASR total.
 - Both were decided before any model run. `src/evaluate.py` is tested on hand-made in-memory rows.
+- The new evaluation test failed at first (IndexError in `table_conditions` for an empty split), and that commit
+  was pushed with 1 of 68 tests failing. Fixed in the next commit; 68 pass.
