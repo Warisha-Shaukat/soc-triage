@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+# Raw public downloads are large and belong to their publishers; not redistributed here.
+data/raw/
+data/attack_kb/*.json
+results/cache/

@@ -1,0 +1,74 @@
+# STATUS: PROPOSED. Not approved by the author yet (AGENTS.md section 13, step 2).
+# Every number below is a starting point; tune on dev only.
+
+seed: 20261125
+
+ollama:
+  url: http://localhost:11434
+  temperature: 0
+  num_ctx: 4096
+  num_predict: 400        # max output tokens; caps runaway replies
+  think: false            # Ollama chat parameter, turns reasoning off (Qwen3)
+  timeout_s: 120
+
+models:
+  # Tag = what we pull. Digest = first 12 hex of the registry manifest sha256,
+  # checked 2026-11-25. If `ollama list` shows a different id, the tag moved.
+  primary:
+    tag: qwen3:8b-q4_K_M
+    registry_digest: 500a1f067a9f
+    size_gb: 5.23
+  secondary:              # P1, condition F
+    tag: llama3.1:8b-instruct-q4_K_M
+    registry_digest: 46e0c10c039e
+    size_gb: 4.92
+
+paths:
+  alerts: data/alerts.jsonl
+  splits: data/splits.json
+  injection_set: data/injection_set.jsonl
+  prompt: prompts/triage_system.txt
+  raw_public: data/raw
+  results_raw: results/raw
+  results_tables: results/tables
+  cache: results/cache
+
+data:
+  target_total: 400       # inside the 300-600 range in the spec
+  test_fraction: 0.5      # larger test share, since it carries the statistics
+  group_key: rule.id      # all alerts of one rule go to the same split
+  max_per_rule: 20        # stop one noisy rule from dominating
+
+guard:
+  # Layers can be switched one by one for ablations.
+  layers:
+    field_selection: true
+    normalization: true
+    data_separation: true
+    evidence_grounding: true
+    suspicion_detector: true
+  max_field_chars: 200
+  nonce_bytes: 8
+  allowed_fields:
+    - rule.id
+    - rule.level
+    - rule.description
+    - rule.groups
+    - agent.name
+    - location
+    - decoder.name
+    - data.srcip
+    - data.srcuser
+    - data.dstuser
+    - data.url
+    - data.user_agent
+    - data.command
+    - full_log
+
+retrieval:
+  enabled: false          # P1, condition C
+  top_k: 3
+
+baseline:
+  sweep_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+  objective: f1           # chosen on dev, then frozen
