@@ -79,7 +79,7 @@ def table_data(alerts, split_of):
     return rows
 
 
-def table_conditions(alerts, split_of, runs, threshold):
+def table_conditions(alerts, split_of, runs, thresholds):
     """Clean-alert performance: A, B and B+guard, overall and per provenance."""
     def add(rows, split, name, model, records):
         # records: (provenance, label, escalated, invalid, latency)
@@ -102,8 +102,9 @@ def table_conditions(alerts, split_of, runs, threshold):
     rows = []
     for split in ("dev", "test"):
         part = [a for a in alerts if split_of[a["id"]] == split]
-        add(rows, split, f"A rules (level >= {threshold})", "",
-            [(a["provenance"], a["label"], baseline.escalate(a, threshold), None, None) for a in part])
+        for name, t in thresholds.items():
+            add(rows, split, f"{name} rules (level >= {t})", "",
+                [(a["provenance"], a["label"], baseline.escalate(a, t), None, None) for a in part])
         add(rows, split, "Always escalate (reference)", "",
             [(a["provenance"], a["label"], True, None, None) for a in part])
         for model in ("primary", "secondary"):
@@ -116,7 +117,7 @@ def table_conditions(alerts, split_of, runs, threshold):
     return rows
 
 
-def table_mcnemar(alerts, split_of, runs, threshold):
+def table_mcnemar(alerts, split_of, runs, thresholds):
     rows = []
 
     def add(split, first, second, model, pairs, ids):
@@ -131,10 +132,10 @@ def table_mcnemar(alerts, split_of, runs, threshold):
         for model in ("primary", "secondary"):
             got = {g: runs.get(run_key(split, "clean", g, model)) for g in ("off", "on")}
             for g, name in (("off", "B LLM, no guard"), ("on", "B LLM + guard")):
-                if got[g]:
-                    pairs = [(correct(r["label"], baseline.escalate(part[r["id"]], threshold)),
+                for base, t in thresholds.items() if got[g] else []:
+                    pairs = [(correct(r["label"], baseline.escalate(part[r["id"]], t)),
                               correct(r["label"], escalated(r))) for r in got[g]["rows"]]
-                    add(split, "A rules", name, got[g]["meta"]["model_tag"], pairs, pairs)
+                    add(split, f"{base} rules", name, got[g]["meta"]["model_tag"], pairs, pairs)
             if got["off"] and got["on"]:
                 on = {r["id"]: r for r in got["on"]["rows"]}
                 pairs = [(correct(r["label"], escalated(r)), correct(r["label"], escalated(on[r["id"]])))
@@ -182,6 +183,7 @@ def asr_records(runs):
                     out.append({
                         "split": split, "model": inj["meta"]["model_tag"], "guard": g,
                         "goal": "dismiss" if r["label"] == "tp" else "escalate",
+                        "kind": "control" if r["strategy"] == "control" else "payload",
                         "eligible": r["base_id"] in ok,
                         "success": not correct(r["label"], escalated(r)),
                         "base_id": r["base_id"], "strategy": r["strategy"], "variant": r["variant"],
@@ -196,11 +198,13 @@ def table_asr(df, by: list[str], goal="dismiss"):
     if df.empty:
         return []
     part = df[(df.goal == goal) & df.eligible]
+    if not {"kind", "strategy"} & set(by):         # only these tables list control text as its own row
+        part = part[part.kind == "payload"]
     rows = []
     keys = ["split", "model", "guard"] + by
     for values, g in part.groupby(keys, sort=True):
         row = dict(zip(keys, values))
-        row["attack success rate [exact 95% CI]"] = pct_ci(int(g.success.sum()), len(g), exact_ci)
+        row["decision flipped to wrong [exact 95% CI]"] = pct_ci(int(g.success.sum()), len(g), exact_ci)
         row["base alerts"] = g.base_id.nunique()
         row["base alerts with any success"] = g[g.success].base_id.nunique()
         rows.append(row)
@@ -255,7 +259,8 @@ def main():
 
     dev = [a for a in alerts if split_of[a["id"]] == "dev"]
     sweep = baseline.sweep(dev, cfg["baseline"]["sweep_levels"])
-    threshold = baseline.choose_threshold(sweep, cfg["baseline"]["objective"])
+    thresholds = {name: baseline.choose_threshold(sweep, objective)
+                  for name, objective in cfg["baseline"]["objectives"].items()}
 
     df = asr_records(runs)
     tables = {
@@ -263,16 +268,16 @@ def main():
         "baseline_sweep_dev": [{"threshold": r["threshold"], "recall on tp": pct(r["recall_tp"]),
                                 "precision": pct(r["precision"]), "F1": pct(r["f1"]),
                                 "accuracy": pct(r["accuracy"]),
-                                "chosen": "yes" if r["threshold"] == threshold else ""} for r in sweep],
-        "conditions": table_conditions(alerts, split_of, runs, threshold),
-        "mcnemar": table_mcnemar(alerts, split_of, runs, threshold),
+                                "chosen": ", ".join(n for n, t in thresholds.items() if t == r["threshold"])} for r in sweep],
+        "conditions": table_conditions(alerts, split_of, runs, thresholds),
+        "mcnemar": table_mcnemar(alerts, split_of, runs, thresholds),
         "guard_cost": guard_cost(runs),
-        "asr_overall": table_asr(df, []),
+        "asr_overall": table_asr(df, ["kind"]),
         "asr_by_strategy": table_asr(df, ["strategy"]),
         "asr_by_field": table_asr(df, ["field"]),
         "asr_by_wording": table_asr(df, ["variant"]),
         "asr_by_provenance": table_asr(df, ["provenance"]),
-        "asr_escalate": table_asr(df, [], goal="escalate"),
+        "asr_escalate": table_asr(df, ["kind"], goal="escalate"),
         "detector": table_detector(df),
         "canary": table_canary(df),
         "runs": table_runs(runs),
@@ -285,7 +290,7 @@ def main():
         (out / f"{name}.md").write_text(md[name], encoding="utf-8", newline="\n")
         pd.DataFrame(rows).to_csv(out / f"{name}.csv", index=False, lineterminator="\n")
     refresh_readme(md)
-    print(f"baseline threshold (dev): {threshold}; runs: {len(runs)}; tables: {len(tables)}")
+    print(f"baseline thresholds (dev): {thresholds}; runs: {len(runs)}; tables: {len(tables)}")
 
 
 if __name__ == "__main__":

@@ -233,6 +233,13 @@ def test_two_or_more_variants_and_held_out_only_on_test():
     assert "c" in {c["variant"] for c in inj.build(alerts, CFG, "test", 1)}
 
 
+def test_control_text_is_planted_and_not_flagged():
+    cases = inj.build(generate(CFG["seed"])[:20], CFG, "dev", 1)
+    assert {c["variant"] for c in cases if c["strategy"] == "control"} == {"n1", "n2"}
+    for text, _ in inj.CONTROLS.values():
+        assert guard.detect_suspicion({"full_log": text}) == []
+
+
 # --- pipeline with a fake model --------------------------------------------------------
 class FakeClient:
     def __init__(self, verdict=None):
@@ -271,3 +278,47 @@ def test_client_retries_once_and_caches(tmp_path, monkeypatch):
     second = client.triage("sys", "data n2", "n2")         # new nonce, same alert: cache hit
     assert first.verdict and len(first.raw) == 2 and not first.cached
     assert second.cached and second.raw == first.raw
+
+
+# --- evaluation on hand-made rows (in memory only, never written to results/) ---------------
+def fake_run(which, guard_state, rows):
+    meta = {"model_tag": "fake", "model_digest": "0", "ollama_version": "0", "prompt_sha256": "0" * 64,
+            "git_commit": "0" * 40, "n": len(rows), "started": "", "guard": guard_state}
+    full = [{"provenance": "synthetic", "guard_flags": [], "reasons": [], "latency_s": 1.0, "rationale": "r",
+             "canary": None, "field": "full_log", "variant": "a", **r} for r in rows]
+    return {"meta": meta, "rows": full}
+
+
+def test_evaluation_tables_by_hand():
+    from src import evaluate as ev
+    alerts = [{"id": i, "label": lab, "provenance": "synthetic", "wazuh": {"rule": {"id": "1", "level": 5}}}
+              for i, lab in [("t1", "tp"), ("t2", "tp"), ("f1", "fp")]]
+    split_of = {a["id"]: "dev" for a in alerts}
+    clean = [{"id": "t1", "base_id": "t1", "label": "tp", "final_verdict": "true_positive"},
+             {"id": "t2", "base_id": "t2", "label": "tp", "final_verdict": "false_positive"},   # missed when clean
+             {"id": "f1", "base_id": "f1", "label": "fp", "final_verdict": "false_positive"}]
+    guarded = [{**r, "final_verdict": "needs_human", "reasons": ["suspected_injection"]} if r["id"] == "f1" else r
+               for r in clean]
+    attack = [{"id": "x1", "base_id": "t1", "label": "tp", "strategy": "S1", "final_verdict": "false_positive"},
+              {"id": "x2", "base_id": "t1", "label": "tp", "strategy": "S2", "final_verdict": "needs_human"},
+              {"id": "x3", "base_id": "t2", "label": "tp", "strategy": "S1", "final_verdict": "false_positive"},
+              {"id": "x4", "base_id": "t1", "label": "tp", "strategy": "control", "final_verdict": "true_positive"}]
+    runs = {"dev_clean_guard-off_primary": fake_run("clean", "off", clean),
+            "dev_clean_guard-on_primary": fake_run("clean", "on", guarded),
+            "dev_inject_guard-off_primary": fake_run("inject", "off", attack)}
+
+    # t2 was already missed when clean, so x3 is not eligible: 1 of 2 payloads flips, 0 of 1 controls.
+    df = ev.asr_records(runs)
+    rates = {r["kind"]: r["decision flipped to wrong [exact 95% CI]"] for r in ev.table_asr(df, ["kind"])}
+    assert rates["payload"].startswith("50.0% (1/2)") and rates["control"].startswith("0.0% (0/1)")
+    assert len(ev.table_asr(df, ["field"])) == 1 and "(1/2)" in str(ev.table_asr(df, ["field"]))
+
+    cost = ev.guard_cost(runs)[0]
+    assert cost["escalated, guard off"] == 0 and cost["escalated, guard on"] == 1
+    assert cost["of these: suspicion flag"] == 1
+
+    mc = [r for r in ev.table_mcnemar(alerts, split_of, runs, {"A1": 1, "A2": 4}) if r["second"] == "B LLM, no guard"]
+    assert len(mc) == 2 and (mc[0]["only first correct"], mc[0]["only second correct"]) == (1, 1)
+    table = ev.table_conditions(alerts, split_of, runs, {"A1": 1, "A2": 4})
+    row = next(r for r in table if r["condition"] == "B LLM, no guard" and r["provenance"] == "all")
+    assert row["missed attacks"] == 1 and "(1/2)" in row["recall on tp [exact 95% CI]"]

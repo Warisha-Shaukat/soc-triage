@@ -79,4 +79,5 @@ retrieval:
 
 baseline:
   sweep_levels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-  objective: f1           # chosen on dev, then frozen
+  # Two rules baselines, each threshold chosen on dev and then frozen (author's decision).
+  objectives: {A1: f1, A2: accuracy}

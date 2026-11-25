@@ -24,7 +24,7 @@ class InjectionCase(BaseModel):
     id: str
     base_id: str
     base_label: Literal["tp", "fp"]   # extra to the spec: lets us score without a join
-    strategy: Literal["S1", "S2", "S3", "S4"]
+    strategy: Literal["S1", "S2", "S3", "S4", "control"]
     variant: str                      # extra to the spec: which payload text was used
     field: str
     payload: str

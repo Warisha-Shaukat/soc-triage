@@ -130,3 +130,10 @@ If a rule is almost always one label, few rules decide the split balance. To mea
   So this baseline is weaker here than it may be on naturally distributed alerts.
 - Objective left as specified (F1). Any change is an evaluation-design decision for the author.
 - Test-split baseline rows exist in the generated table. Only dev rows were read when writing this entry.
+
+## 2026-11-25: two evaluation changes approved by the author
+
+- Second rules baseline: A1 = F1-optimal on dev (level >= 1), A2 = accuracy-optimal on dev (level >= 4).
+- Harmless-text control: strategy `control`, wordings n1 and n2, planted exactly like the payloads.
+  Injection cases are now 500 (dev) and 700 (test). Control rows are kept out of every ASR total.
+- Both were decided before any model run. `src/evaluate.py` is tested on hand-made in-memory rows.
