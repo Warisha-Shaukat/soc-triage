@@ -1,4 +1,4 @@
-# STATUS: PROPOSED. Not approved by the author yet (AGENTS.md section 13, step 2).
+# STATUS: approved by the author on 2026-11-25 (both models).
 # Every number below is a starting point; tune on dev only.
 
 seed: 20261125
@@ -6,8 +6,9 @@ seed: 20261125
 ollama:
   url: http://localhost:11434
   temperature: 0
+  seed: 20261125
   num_ctx: 4096
-  num_predict: 400        # max output tokens; caps runaway replies
+  num_predict: 512        # max output tokens; caps runaway replies
   think: false            # Ollama chat parameter, turns reasoning off (Qwen3)
   timeout_s: 120
 
@@ -48,6 +49,7 @@ guard:
     evidence_grounding: true
     suspicion_detector: true
   max_field_chars: 200
+  unguarded_max_chars: 2000   # unguarded runs: a context-window safety cap, not a defence
   nonce_bytes: 8
   allowed_fields:
     - rule.id
@@ -64,6 +66,12 @@ guard:
     - data.user_agent
     - data.command
     - full_log
+
+injection:
+  # Attacker-controlled fields; only fields present in the alert are used.
+  fields: [data.srcuser, data.url, data.user_agent, data.command, full_log]
+  max_base_tp: 40         # attack alerts per split (each gets 8 cases on dev, 12 on test)
+  max_base_fp: 10         # benign alerts per split, for the secondary experiment
 
 retrieval:
   enabled: false          # P1, condition C
