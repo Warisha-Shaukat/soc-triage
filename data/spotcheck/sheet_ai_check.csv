@@ -1,0 +1,43 @@
+﻿row,your_label,your_note
+1,tp,AI: possible port/service probe; weak on its own
+2,fp,AI: single ordinary mail login
+3,fp,AI: 
+4,fp,AI: 
+5,fp,AI: 
+6,fp,AI: 
+7,tp,AI: password-file probe
+8,tp,AI: 404 enumeration
+9,fp,AI: ordinary session; nothing unusual visible
+10,tp,AI: 
+11,tp,AI: 
+12,fp,AI: single failed login
+13,unsure,AI: sudo session end; text cannot show intent
+14,tp,AI: 
+15,tp,AI: 
+16,fp,AI: 
+17,tp,AI: 
+18,fp,AI: 
+19,fp,AI: 
+20,fp,AI: 
+21,tp,AI: 
+22,fp,AI: 
+23,fp,AI: 
+24,fp,AI: ordinary session; nothing unusual visible
+25,tp,AI: sudo -l run from a web uploads folder
+26,fp,AI: 
+27,fp,AI: single failed login
+28,fp,AI: 
+29,tp,AI: web account switching to a user
+30,tp,AI: WPScan password attempts
+31,fp,AI: 
+32,tp,AI: 
+33,fp,AI: 
+34,tp,AI: 
+35,tp,AI: 
+36,tp,AI: 
+37,tp,AI: WPScan probe
+38,fp,"AI: expired key, scheduled retries"
+39,fp,"AI: few attempts, could be a mistyped password"
+40,tp,AI: 
+41,fp,"AI: few attempts, could be a mistyped password"
+42,tp,AI: sudo -l run from a web uploads folder

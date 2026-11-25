@@ -2,6 +2,7 @@
 
     python -m src.spotcheck make     # writes data/spotcheck/sheet.csv and evidence.csv
     python -m src.spotcheck score    # compares the filled sheet with the stored labels
+    python -m src.spotcheck score sheet_ai_check.csv    # the coding agent's labels; NOT a hand check
 
 sheet.csv     blind: alert details, no label. Fill `your_label` with tp, fp or unsure.
 evidence.csv  open AFTER the sheet is filled: stored label, why, attack window, attacker IP.
@@ -81,11 +82,11 @@ def make():
     print(len(sheet), "alerts to check")
 
 
-def score():
+def score(sheet_name="sheet.csv"):
     def read(name):
         with open(DIR / name, encoding="utf-8-sig", newline="") as f:
             return {r["row"]: r for r in csv.DictReader(f)}
-    sheet, evidence = read("sheet.csv"), read("evidence.csv")
+    sheet, evidence = read(sheet_name), read("evidence.csv")
     answers = {row: r["your_label"].strip().lower() for row, r in sheet.items()}
     bad = [row for row, label in answers.items() if label not in ("tp", "fp", "unsure", "")]
     if bad:
@@ -105,4 +106,4 @@ def score():
 
 
 if __name__ == "__main__":
-    {"make": make, "score": score}[sys.argv[1]]()
+    {"make": make, "score": score}[sys.argv[1]](*sys.argv[2:])
