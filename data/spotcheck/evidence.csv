@@ -1,0 +1,43 @@
+﻿row,id,split,provenance,stored_label,why,scenario,time_utc,attack_window,inferred_attacker_ip,source_is_attacker
+1,p0012,dev,public,tp,phase=service_scans; source is the scenario attacker,wheeler,2022-01-30T07:39:04.000000Z,service_scans,10.38.243.125,yes
+2,p0194,test,public,fp,outside all attack windows,wilson,2022-02-03T12:34:15.000000Z,none,10.182.193.78,no source IP in alert
+3,p0095,dev,public,fp,outside all attack windows,fox,2022-01-15T07:10:08.000000Z,none,172.17.130.196,no source IP in alert
+4,p0101,dev,public,fp,outside all attack windows,fox,2022-01-15T06:35:39.000000Z,none,172.17.130.196,no source IP in alert
+5,s0059,dev,synthetic,fp,broken link or uptime check from an internal client,,,,,
+6,s0133,dev,synthetic,fp,onboarding automation creating a normal user [hard],,,,,
+7,p0055,dev,public,tp,phase=dirb; source is the scenario attacker,wilson,2022-02-07T11:14:33.563507Z,dirb,10.182.193.78,yes
+8,p0137,test,public,tp,phase=dirb; source is the scenario attacker,russellmitchell,2022-01-24T03:57:27.000000Z,dirb,172.19.131.174,yes
+9,p0009,test,public,fp,outside all attack windows,wardbeck,2022-01-21T09:44:44.000000Z,none,10.132.56.81,no source IP in alert
+10,p0028,test,public,tp,phase=dirb; source is the scenario attacker,wheeler,2022-01-30T07:52:18.000000Z,dirb,10.38.243.125,yes
+11,s0092,test,synthetic,tp,web account installing attack tools [hard],,,,,
+12,p0113,test,public,fp,outside all attack windows,santos,2022-01-17T15:45:30.000000Z,none,172.21.128.119,no
+13,p0197,dev,public,tp,phase=privilege_escalation; host authentication alert,harrison,2022-02-08T08:36:57.000000Z,privilege_escalation,10.237.1.238,no source IP in alert
+14,p0184,dev,public,tp,phase=dirb; source is the scenario attacker,harrison,2022-02-08T07:43:14.810008Z,dirb,10.237.1.238,yes
+15,p0029,dev,public,tp,phase=dirb; source is the scenario attacker,harrison,2022-02-08T07:45:47.408171Z,dirb,10.237.1.238,yes
+16,s0141,test,synthetic,fp,configuration file updated by the package manager,,,,,
+17,s0070,dev,synthetic,tp,external client probing sensitive paths with a scanning tool,,,,,
+18,p0136,dev,public,fp,outside all attack windows,wheeler,2022-01-26T06:29:12.000000Z,none,10.38.243.125,no
+19,p0033,dev,public,fp,outside all attack windows,wilson,2022-02-05T19:44:48.000000Z,none,10.182.193.78,no source IP in alert
+20,s0095,test,synthetic,fp,automatic security update,,,,,
+21,s0002,test,synthetic,tp,external host guessing common account names,,,,,
+22,p0076,test,public,fp,outside all attack windows,wardbeck,2022-01-22T11:54:13.000000Z,none,10.132.56.81,no
+23,p0238,dev,public,fp,outside all attack windows,wardbeck,2022-01-21T10:24:25.000000Z,none,10.132.56.81,no source IP in alert
+24,p0115,test,public,tp,phase=privilege_escalation; host authentication alert,harrison,2022-02-08T08:36:38.000000Z,privilege_escalation,10.237.1.238,no source IP in alert
+25,p0121,dev,public,tp,phase=privilege_escalation; host authentication alert,wheeler,2022-01-30T17:52:07.000000Z,privilege_escalation,10.38.243.125,no source IP in alert
+26,p0069,test,public,fp,outside all attack windows,fox,2022-01-17T06:34:53.000000Z,none,172.17.130.196,no
+27,p0039,dev,public,fp,outside all attack windows,wardbeck,2022-01-23T09:46:32.000000Z,none,10.132.56.81,no source IP in alert
+28,p0163,dev,public,fp,outside all attack windows,wardbeck,2022-01-22T18:47:12.000000Z,none,10.132.56.81,no
+29,p0129,test,public,tp,phase=privilege_escalation; host authentication alert,fox,2022-01-18T13:14:31.000000Z,privilege_escalation,172.17.130.196,no source IP in alert
+30,p0235,dev,public,tp,phase=wpscan; source is the scenario attacker,wilson,2022-02-07T11:20:19.000000Z,wpscan,10.182.193.78,yes
+31,p0052,test,public,fp,outside all attack windows,wilson,2022-02-03T11:15:37.000000Z,none,10.182.193.78,no
+32,s0074,test,synthetic,tp,service account obtaining a root shell or reading credentials [hard],,,,,
+33,p0104,dev,public,fp,outside all attack windows,santos,2022-01-15T00:36:22.000000Z,none,172.21.128.119,no source IP in alert
+34,p0143,dev,public,tp,phase=wpscan; source is the scenario attacker,wardbeck,2022-01-23T12:11:41.000000Z,wpscan,10.132.56.81,yes
+35,s0100,dev,synthetic,tp,service account scheduling a hidden script in a temporary folder,,,,,
+36,p0109,test,public,tp,phase=dirb; source is the scenario attacker,wheeler,2022-01-30T07:48:03.000000Z,dirb,10.38.243.125,yes
+37,p0114,test,public,tp,phase=wpscan; source is the scenario attacker,santos,2022-01-17T11:22:42.000000Z,wpscan,172.21.128.119,yes
+38,s0023,test,synthetic,fp,service account with an expired key retrying on schedule [hard],,,,,
+39,p0202,dev,public,fp,outside all attack windows,russellmitchell,2022-01-24T09:49:46.000000Z,none,172.19.131.174,no
+40,p0228,test,public,tp,phase=dirb; source is the scenario attacker,santos,2022-01-17T11:22:09.000000Z,dirb,172.21.128.119,yes
+41,p0227,test,public,fp,outside all attack windows,fox,2022-01-15T18:30:43.000000Z,none,172.17.130.196,no
+42,p0185,dev,public,tp,phase=privilege_escalation; host authentication alert,fox,2022-01-18T13:14:41.000000Z,privilege_escalation,172.17.130.196,no source IP in alert

@@ -139,3 +139,10 @@ If a rule is almost always one label, few rules decide the split balance. To mea
 - Both were decided before any model run. `src/evaluate.py` is tested on hand-made in-memory rows.
 - The new evaluation test failed at first (IndexError in `table_conditions` for an empty split), and that commit
   was pushed with 1 of 68 tests failing. Fixed in the next commit; 68 pass.
+
+## 2026-11-25: author review and spot-check sheet
+
+- The author states having reviewed `data/labeling_rule.md` and the config additions.
+- `python -m src.spotcheck make` wrote 42 alerts (32 public, 10 synthetic; 16/16 and 5/5 tp/fp; both splits):
+  a blind sheet and a separate evidence file. The sheet is EMPTY; no label has been checked by hand yet.
+- The sheet contains 20 test alerts. The check may change labels, but must not change prompt, guard or thresholds.

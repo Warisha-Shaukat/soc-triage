@@ -1,8 +1,8 @@
 # Labeling rule
 
 **Authorship note.** Section 9 of `AGENTS.md` reserves this file for the author. On 2026-11-25 the author
-asked the coding agent (Claude Code) to choose the labeling. This text is therefore the agent's draft,
-for the author to review. **The 30-label spot-check by hand has not been done.** No claim of human label
+asked the coding agent (Claude Code) to choose the labeling. This text is therefore the agent's draft.
+The author states having reviewed it on 2026-11-25. **The 30-label spot-check by hand has not been done.** No claim of human label
 verification may be made until it is.
 
 ## What the labels mean
