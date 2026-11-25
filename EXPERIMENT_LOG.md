@@ -146,3 +146,21 @@ If a rule is almost always one label, few rules decide the split balance. To mea
 - `python -m src.spotcheck make` wrote 42 alerts (32 public, 10 synthetic; 16/16 and 5/5 tp/fp; both splits):
   a blind sheet and a separate evidence file. The sheet is EMPTY; no label has been checked by hand yet.
 - The sheet contains 20 test alerts. The check may change labels, but must not change prompt, guard or thresholds.
+
+## 2026-11-25: label check done by the coding agent, not by hand
+
+- The author asked the agent to check all 42 alerts. The agent labeled from the sheet text only; its labels were
+  committed (`data/spotcheck/sheet_ai_check.csv`) before the evidence rows were opened. `sheet.csv` is still empty:
+  the hand spot-check required by `AGENTS.md` section 9 has NOT been done.
+- Result (`python -m src.spotcheck score sheet_ai_check.csv`): public 30/31 agree, 1 unsure
+  (exact 95% CI 83.3-99.9%); synthetic 10/10.
+- This is weak evidence of label quality. The agent also wrote the labeling rule and the generator, and had seen
+  some of these public dev alerts with labels earlier.
+- Disagreement: row 24 (p0115, PAM session opened, stored tp, test split). Unsure: row 13 (PAM session closed, stored tp,
+  dev). Both are `tp` only because they fall in a privilege-escalation window; their text is like benign PAM alerts.
+- No label changed. The PAM `tp` alerts stay as a known weak spot of the rule.
+- AI check done before any model run; no test alert text was used to change the prompt, guard or thresholds.
+
+## 2026-11-25: Ollama
+
+- Ollama 0.40.18 installed and serving on 127.0.0.1:11434. Both approved models are being pulled.
