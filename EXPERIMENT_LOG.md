@@ -52,3 +52,40 @@ How the author assigned labels is NOT established. `wy777/wazuh-alerts` exists w
 
 **Open risk.** Splitting by `rule.id` while stratifying by label only works if rules carry mixed labels.
 If a rule is almost always one label, few rules decide the split balance. To measure once data is present.
+
+## 2026-11-25: approvals and installs
+
+- The author approved `config.yaml` and both models, a private GitHub repo, installing `gh` and Ollama,
+  and the AIT-ADS download. The author also asked the agent to decide the labeling. `data/labeling_rule.md`
+  is therefore agent-drafted. The 30-label hand spot-check has NOT been done.
+- Config added after that approval: `ollama.seed`, `num_predict` 400 -> 512, `guard.unguarded_max_chars`,
+  and the `injection` block (fields, 40 tp + 10 fp base alerts per split). The author has not reviewed these.
+- `gh` installed through winget.
+
+## 2026-11-25: failures so far
+
+- First AIT-ADS download aborted at 5,668,920 of 96,202,946 bytes: `curl: (56) schannel: server closed abruptly`.
+  A resuming loop replaced it; its first attempt also stalled (`curl: (28) Operation too slow`) at 12,826,364 bytes.
+- `pip install` of all dependencies did not finish within 10 minutes (slow network); it was left running.
+- Three long shell heredocs failed with "unexpected EOF while looking for matching quote". Nothing was
+  written. Cause not confirmed (only long commands failed). The files were created with an editor tool instead.
+
+## 2026-11-25: AIT-ADS `fox` scenario profiled (from the partial download)
+
+- 462,523 alerts in `fox_wazuh.json`. Rule 31101 (web 400 errors) is 380,062 of them, 375,428 inside the `dirb` window.
+- Suricata alerts appear through two decoders: `json` (rule 86601) and `snort` (rules 20100, 20101, ...).
+- 855 of 27,942 Dovecot login-success alerts fall inside attack windows, so a pure time-window label would
+  call them attacks. Decision: the stricter rule in `data/labeling_rule.md`.
+- This look covered all `fox` alerts before any dev/test split existed. It informed the loader and the
+  labeling rule, not the prompt or the guard.
+
+## 2026-11-25: detector behaviour on clean synthetic dev alerts
+
+- 168 synthetic alerts generated (84 tp, 84 fp).
+- With an interim synthetic-only split, the suspicion detector flagged 7 of 84 clean dev alerts: all from the
+  encoded-PowerShell family (3 fp, 4 tp), by the base64 rule. Not tuned away: it is a real cost of that rule.
+
+## 2026-11-25: tests
+
+- 64 tests passed with the system Python 3.12.1, with `statsmodels` replaced by a stub because it was not
+  installed yet; `test_clopper_pearson_known_value` was deselected for that reason. To be rerun in the venv.
