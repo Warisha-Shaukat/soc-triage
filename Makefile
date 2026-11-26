@@ -28,7 +28,7 @@ eval:
 	$(PY) -m src.evaluate
 
 app:
-	@echo "app.py is P1 and not written yet"
+	$(PY) -m streamlit run app.py
 
 test:
 	$(PY) -m pytest -q

@@ -199,3 +199,15 @@ If a rule is almost always one label, few rules decide the split balance. To mea
   dev results. `src/inspect_run.py` (read-only diagnostics) is the only code added. This is the final configuration.
 - Test is run next, once. Authorization: `AGENTS.md` section 8 asks for it; the agent stated it would do so unless the
   author objected, and the author said to continue without objecting. Not approved in explicit words.
+
+## 2026-11-26: Streamlit app (P1), requested by the author
+
+- `app.py` follows `AGENTS.md` section 4.6 (queue, evidence highlighting, Confirm/Override to `data/overrides.jsonl`).
+  Additions beyond the spec: labels hidden by default (to keep the hand spot-check blind) and a "Try an alert" tab that
+  runs the live pipeline, guard off and on, with an optional harmless payload and a separate cache.
+- Streamlit 1.67.0 was already pinned; no new dependency. `app.py`, `tests/` and `.gitignore` are outside the inputs
+  that mark a run `-dirty`; `data/overrides.jsonl` is gitignored so a click cannot mark later runs dirty.
+- Checked with 3 new unit tests (71 pass) and Streamlit's headless AppTest, including one Confirm click written to a
+  scratch file. Not yet opened in a browser, and the live tab was not run against Ollama, because Llama runs were
+  using the GPU. Committed while `dev_inject_guard-off_secondary` was running; triage code, prompts, config and data
+  are unchanged, so later Llama runs record a newer commit with the same pipeline.

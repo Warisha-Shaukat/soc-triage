@@ -33,6 +33,7 @@ https://zenodo.org/records/8263181 (CC-BY-4.0) into `data/raw/ait_ads/`.
 | Clean dev runs | `make run` | `python -m src.pipeline --split dev --set clean --guard off` (then `on`) |
 | Injection dev runs | `make inject` | `python -m src.pipeline --split dev --set inject --guard off` (then `on`) |
 | All tables | `make eval` | `python -m src.evaluate` |
+| Analyst app | `make app` | `.venv/Scripts/python -m streamlit run app.py` |
 
 `evaluate` reads saved raw outputs only and never calls a model. The test split uses the same pipeline
 command with `--split test`; a finished run is refused a second time unless `--rerun` is given.
@@ -171,6 +172,20 @@ Runs:
 <!-- END:runs -->
 
 More tables (by field, by provenance, detector hits, escalation attacks, baseline sweep) are in `results/tables/`.
+
+## Analyst app (`app.py`)
+
+`streamlit run app.py` opens one page with two tabs:
+
+- **Queue:** pick a finished run. Left, its alerts with final verdict and guard flags; right, the selected alert's
+  fields with the model's evidence quotes highlighted, the planted payload (injection runs), and **Confirm** /
+  **Override** buttons that append to `data/overrides.jsonl` (not committed). Stored labels are hidden unless you tick
+  "Show stored labels". The tab reads saved runs only and changes no result.
+- **Try an alert:** pick an alert or paste Wazuh JSON, optionally plant one of the harmless test payloads, and run it
+  through the real pipeline with the guard off and on side by side. This calls Ollama live, with its own cache
+  (`results/cache_app/`). It shares the GPU with any running experiment, so use it when none is running.
+
+No authentication: lab prototype only.
 
 ## Limitations
 

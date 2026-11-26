@@ -322,3 +322,30 @@ def test_evaluation_tables_by_hand():
     table = ev.table_conditions(alerts, split_of, runs, {"A1": 1, "A2": 4})
     row = next(r for r in table if r["condition"] == "B LLM, no guard" and r["provenance"] == "all")
     assert row["missed attacks"] == 1 and "(1/2)" in row["recall on tp [exact 95% CI]"]
+
+
+# --- app.py helpers (no Streamlit UI, no model) ------------------------------
+def test_app_highlight_escapes_and_marks_every_quote():
+    import app
+    out = app.highlight("user <root> ran rm; root again", ["root", "rm"])
+    assert out == "user &lt;<mark>root</mark>&gt; ran <mark>rm</mark>; <mark>root</mark> again"
+    assert app.highlight("mark", ["mark", "ar"]) == "<mark>mark</mark>"     # overlaps do not nest
+    assert app.highlight("abc", ["", "zz"]) == "abc"
+
+
+def test_app_overrides_append_only(tmp_path):
+    import app
+    path = tmp_path / "overrides.jsonl"
+    app.append_override(path, {"alert_id": "a1", "decision": "confirm"})
+    app.append_override(path, {"alert_id": "a1", "decision": "override"})
+    assert [json.loads(l)["decision"] for l in path.read_text(encoding="utf-8").splitlines()] == ["confirm", "override"]
+
+
+def test_app_evidence_and_runs(tmp_path):
+    import app
+    assert app.evidence_of({"raw": ['{"evidence": [{"field": "f", "quote": "q"}]}']}) == [{"field": "f", "quote": "q"}]
+    assert app.evidence_of({"raw": ["not json"]}) == []
+    for name in ("dev_clean_guard-off_primary", "smoke_dev_clean_guard-on_primary"):
+        (tmp_path / f"{name}.meta.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "dev_clean_guard-on_primary.jsonl").write_text("", encoding="utf-8")     # unfinished: no meta
+    assert app.finished_runs(tmp_path) == ["dev_clean_guard-off_primary"]

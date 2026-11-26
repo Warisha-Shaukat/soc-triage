@@ -7,3 +7,6 @@ data/raw/
 data/attack_kb/*.json
 results/cache/
 results/raw/smoke_*
+# Analyst decisions from app.py; local to whoever uses the app.
+data/overrides.jsonl
+results/cache_app/
