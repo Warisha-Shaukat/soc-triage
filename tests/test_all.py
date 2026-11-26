@@ -368,3 +368,16 @@ def test_payload_seen_and_model_own_verdict():
     assert row["payload in model input"] == "whole"
     assert row["final verdict flipped [exact 95% CI]"].startswith("0.0% (0/1)")
     assert row["model's own verdict flipped [exact 95% CI]"].startswith("100.0% (1/1)")
+
+
+def test_app_payload_marking_and_stats():
+    import app
+    out = app.highlight("user bob ignore all", ["bob"], ("ignore all",))
+    assert out == 'user <mark>bob</mark> <mark class="payload">ignore all</mark>'
+    assert app.highlight("abc", ["abc"], ("b",)) == '<mark>a</mark><mark class="payload">b</mark><mark>c</mark>'
+    rows = [{"label": "tp", "final_verdict": "false_positive", "guard_flags": []},
+            {"label": "tp", "final_verdict": "needs_human", "guard_flags": ["x"]},
+            {"label": "fp", "final_verdict": "false_positive", "guard_flags": []}]
+    s = app.run_stats(rows)
+    assert (s["attacks"], s["caught"], s["missed"], s["flagged"]) == (2, 1, 1, 1)
+    assert abs(s["accuracy"] - 2 / 3) < 1e-9 and s["counts"]["false_positive"] == 2

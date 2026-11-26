@@ -253,3 +253,12 @@ If a rule is almost always one label, few rules decide the split balance. To mea
   `data/spotcheck/sheet.csv`. No value changed; the file as the author saved it is commit 18f33b5.
   `python -m src.spotcheck score` on this version gives the numbers logged above (public 18/31, synthetic 3/10).
 - The author made the GitHub repository public.
+
+## 2026-11-26: app restyled (author's request)
+
+- `app.py`: header banner, run tags, summary tiles (with labels shown: attacks caught, missed, accuracy), a verdict
+  bar per stored label, colour-coded verdict badges (icon + word, never colour alone), red marking of the planted
+  payload, and a sidebar legend. `.streamlit/config.toml` sets the accent colour. No result or metric changed.
+- Checked: 73 tests pass; headless AppTest runs; the tiles for `test_clean_guard-on_secondary` match the README
+  (29/102 caught, accuracy 57.3%). Screenshots of the clean dev run were inspected; the injected-run panel was not
+  seen rendered (the scripted browser could not switch runs).
