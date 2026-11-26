@@ -246,3 +246,10 @@ If a rule is almost always one label, few rules decide the split balance. To mea
   `python -m src.spotcheck score`: public 18/31 agree (exact 95% CI 39.1-75.5%), synthetic 3/10 (6.7-65.2%).
   13 public and 7 synthetic disagreements. The agent's own check had agreed 30/31 and 10/10; it is not independent.
 - No label was changed. The sensitivity analysis with the author's labels (planned 2026-11-25) has not been run.
+
+## 2026-11-26: spot-check labels moved to the right column; repository made public
+
+- With the author's approval, the labels the author typed in `your_note` were moved to `your_label` in
+  `data/spotcheck/sheet.csv`. No value changed; the file as the author saved it is commit 18f33b5.
+  `python -m src.spotcheck score` on this version gives the numbers logged above (public 18/31, synthetic 3/10).
+- The author made the GitHub repository public.
