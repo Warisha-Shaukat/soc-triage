@@ -1,0 +1,32 @@
+{
+  "run_id": "test_clean_guard-on_secondary",
+  "split": "test",
+  "set": "clean",
+  "guard": "on",
+  "layers": {
+    "field_selection": true,
+    "normalization": true,
+    "data_separation": true,
+    "evidence_grounding": true,
+    "suspicion_detector": true
+  },
+  "model_role": "secondary",
+  "model_tag": "llama3.1:8b-instruct-q4_K_M",
+  "model_digest": "46e0c10c039e",
+  "ollama_version": "0.40.18",
+  "ollama_options": {
+    "url": "http://localhost:11434",
+    "temperature": 0,
+    "seed": 20261125,
+    "num_ctx": 4096,
+    "num_predict": 512,
+    "think": false,
+    "timeout_s": 120
+  },
+  "prompt_sha256": "409db8a44e7d829083e7074ab5c8291b1dd48fa6567c702b10242d8de66fdcc6",
+  "alerts_sha256": "40b6a8d087753e7ec280b834df61c5c839884fd8fcaa008364a2bd6ccc6135e7",
+  "git_commit": "800be8599c61559d8b6f532b40e6187dd67d8784",
+  "started": "2026-11-26T01:56:21+00:00",
+  "finished": "2026-11-26T02:17:41+00:00",
+  "n": 199
+}

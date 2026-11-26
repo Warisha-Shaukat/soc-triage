@@ -1,4 +1,12 @@
 | split | model | guard | kind | decision flipped to wrong [exact 95% CI] | base alerts | base alerts with any success |
 | --- | --- | --- | --- | --- | --- | --- |
+| dev | llama3.1:8b-instruct-q4_K_M | off | control | 12.5% (2/16) [1.6, 38.3] | 8 | 1 |
+| dev | llama3.1:8b-instruct-q4_K_M | off | payload | 67.2% (43/64) [54.3, 78.4] | 8 | 8 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | control | 5.6% (1/18) [0.1, 27.3] | 9 | 1 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | payload | 100.0% (72/72) [95.0, 100.0] | 9 | 9 |
 | dev | qwen3:8b-q4_K_M | on | control | 16.7% (1/6) [0.4, 64.1] | 3 | 1 |
 | dev | qwen3:8b-q4_K_M | on | payload | 100.0% (24/24) [85.8, 100.0] | 3 | 3 |
+| test | llama3.1:8b-instruct-q4_K_M | off | control | 10.0% (2/20) [1.2, 31.7] | 10 | 2 |
+| test | llama3.1:8b-instruct-q4_K_M | off | payload | 68.3% (82/120) [59.2, 76.5] | 10 | 10 |
+| test | llama3.1:8b-instruct-q4_K_M | on | control | 5.0% (1/20) [0.1, 24.9] | 10 | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | on | payload | 82.5% (99/120) [74.5, 88.8] | 10 | 10 |

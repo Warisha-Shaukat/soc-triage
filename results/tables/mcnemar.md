@@ -5,3 +5,18 @@
 | dev | qwen3:8b-q4_K_M | A1 rules | B LLM + guard | 209 | 8 | 24 | +7.7 points | 0.007 |
 | dev | qwen3:8b-q4_K_M | A2 rules | B LLM + guard | 209 | 28 | 26 | -1.0 points | 0.8919 |
 | dev | qwen3:8b-q4_K_M | B LLM, no guard | B LLM + guard | 209 | 9 | 10 | +0.5 points | 1 |
+| dev | llama3.1:8b-instruct-q4_K_M | A1 rules | B LLM, no guard | 209 | 84 | 90 | +2.9 points | 0.7048 |
+| dev | llama3.1:8b-instruct-q4_K_M | A2 rules | B LLM, no guard | 209 | 71 | 59 | -5.7 points | 0.3347 |
+| dev | llama3.1:8b-instruct-q4_K_M | A1 rules | B LLM + guard | 209 | 62 | 85 | +11.0 points | 0.06923 |
+| dev | llama3.1:8b-instruct-q4_K_M | A2 rules | B LLM + guard | 209 | 55 | 60 | +2.4 points | 0.7093 |
+| dev | llama3.1:8b-instruct-q4_K_M | B LLM, no guard | B LLM + guard | 209 | 11 | 28 | +8.1 points | 0.009475 |
+| test | qwen3:8b-q4_K_M | A1 rules | B LLM, no guard | 199 | 0 | 1 | +0.5 points | 1 |
+| test | qwen3:8b-q4_K_M | A2 rules | B LLM, no guard | 199 | 22 | 21 | -0.5 points | 1 |
+| test | qwen3:8b-q4_K_M | A1 rules | B LLM + guard | 199 | 3 | 5 | +1.0 points | 0.7266 |
+| test | qwen3:8b-q4_K_M | A2 rules | B LLM + guard | 199 | 18 | 18 | +0.0 points | 1 |
+| test | qwen3:8b-q4_K_M | B LLM, no guard | B LLM + guard | 199 | 4 | 5 | +0.5 points | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | A1 rules | B LLM, no guard | 199 | 97 | 94 | -1.5 points | 0.885 |
+| test | llama3.1:8b-instruct-q4_K_M | A2 rules | B LLM, no guard | 199 | 76 | 71 | -2.5 points | 0.7416 |
+| test | llama3.1:8b-instruct-q4_K_M | A1 rules | B LLM + guard | 199 | 73 | 85 | +6.0 points | 0.3816 |
+| test | llama3.1:8b-instruct-q4_K_M | A2 rules | B LLM + guard | 199 | 55 | 65 | +5.0 points | 0.4114 |
+| test | llama3.1:8b-instruct-q4_K_M | B LLM, no guard | B LLM + guard | 199 | 10 | 25 | +7.5 points | 0.01667 |

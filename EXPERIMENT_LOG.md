@@ -211,3 +211,38 @@ If a rule is almost always one label, few rules decide the split balance. To mea
   scratch file. Not yet opened in a browser, and the live tab was not run against Ollama, because Llama runs were
   using the GPU. Committed while `dev_inject_guard-off_secondary` was running; triage code, prompts, config and data
   are unchanged, so later Llama runs record a newer commit with the same pipeline.
+
+## 2026-11-26: Qwen3 test runs (once) and Llama 3.1 dev runs finished
+
+- Qwen3 test: all four conditions ran once at commit e2597c0 (1,798 alerts), no failure. Results not read yet.
+- Llama 3.1 smoke (10 dev alerts, guard on): fine. `ollama ps`: id 46e0c10c039e, 5.3 GB, 100% GPU, context 4096.
+  Those 10 answers were reused from the cache in the full guard-on clean dev run (11 cached rows there).
+- Llama dev (`python -m src.inspect_run dev secondary`): 0 retries, 0 invalid. Clean, no guard: it dismissed 84 of
+  102 attacks, across 19 rules. Rationales agree with the verdicts (often confidence "low" and "requires further
+  investigation", yet `false_positive` rather than `needs_human`). This is model behavior, not a parsing error.
+  Because the configuration is frozen for both models, nothing was changed for Llama.
+- Caching in guarded injection runs: 110 rows in each model's guarded dev run were cache hits. All are `full_log`
+  cases where the 200-character cut (layer 1) removed the whole payload, so several cases sent identical text.
+  Counted without a model (planted field only): the payload is fully cut in 100 of 400 dev attack cases and 14 of 560
+  test attack cases, and partly cut in 108 dev and 189 test attack cases. So part of the guarded result comes from
+  truncation, which is a guard layer by design but means the model never saw that payload. This count will become a
+  generated table once the runs finish; cached rows carry the latency of the first identical call.
+- Llama test started next, once, with the same frozen configuration.
+
+## 2026-11-26: Llama 3.1 test runs (once), final tables, hand spot-check
+
+- Llama test: four conditions ran once at commit 800be85 (1,798 alerts), no failure, 0 invalid outputs.
+  Qwen3 test ran at e2597c0. Both commits have the same prompt, guard, config and data.
+- `src/evaluate.py` gained one diagnostic table, `asr_inside`, added after the dev runs and after the test runs had
+  finished: whether the payload survived the 200-character cut, and the model's own verdict before the guard.
+  It does not change any existing metric. 72 tests pass.
+- Main test results (from `results/tables/`): the detector flagged 100% of wordings a/b and 4% of held-out wording c
+  (2 of 50 per strategy). Guarded attack success on c: Qwen3 73/152 (48.0%), Llama 3.1 29/44 (65.9%); on a/b: 0.
+  So the dev result of 0% came from the detector matching the payloads it was written with.
+- Qwen3 escalated 198 of 199 clean test alerts; Llama 3.1 dismissed 97 of 102 attacks. Llama's unguarded attack
+  success rate rests on 1 eligible base alert.
+- Hand spot-check, by the author: 41 of 42 rows labeled (row 39 blank). The labels were typed in the `your_note`
+  column; the file as saved is commit 18f33b5. Moving them to `your_label` without changing a value and running
+  `python -m src.spotcheck score`: public 18/31 agree (exact 95% CI 39.1-75.5%), synthetic 3/10 (6.7-65.2%).
+  13 public and 7 synthetic disagreements. The agent's own check had agreed 30/31 and 10/10; it is not independent.
+- No label was changed. The sensitivity analysis with the author's labels (planned 2026-11-25) has not been run.

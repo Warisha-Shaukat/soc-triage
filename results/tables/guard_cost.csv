@@ -1,2 +1,5 @@
 split,model,benign alerts,"escalated, guard off","escalated, guard on",newly escalated / dismissed before [exact 95% CI],of these: suspicion flag,of these: ungrounded quote
 dev,qwen3:8b-q4_K_M,107,92,83,"6.7% (1/15) [0.2, 31.9]",0,0
+dev,llama3.1:8b-instruct-q4_K_M,107,17,22,"8.9% (8/90) [3.9, 16.8]",2,0
+test,qwen3:8b-q4_K_M,97,96,92,"100.0% (1/1) [2.5, 100.0]",0,0
+test,llama3.1:8b-instruct-q4_K_M,97,3,12,"10.6% (10/94) [5.2, 18.7]",2,1

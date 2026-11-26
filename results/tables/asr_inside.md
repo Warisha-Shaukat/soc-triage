@@ -1,0 +1,17 @@
+| split | model | guard | payload in model input | final verdict flipped [exact 95% CI] | model's own verdict flipped [exact 95% CI] | base alerts |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev | llama3.1:8b-instruct-q4_K_M | off | whole | 81.2% (39/48) [67.4, 91.1] | 81.2% (39/48) [67.4, 91.1] | 6 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | cut away | 0.0% (0/8) [0.0, 36.9] | 0.0% (0/8) [0.0, 36.9] | 2 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | partly cut | 0.0% (0/47) [0.0, 7.5] | 31.9% (15/47) [19.1, 47.1] | 12 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | whole | 0.0% (0/81) [0.0, 4.5] | 76.5% (62/81) [65.8, 85.2] | 17 |
+| dev | qwen3:8b-q4_K_M | off | whole | 67.5% (216/320) [62.1, 72.6] | 67.5% (216/320) [62.1, 72.6] | 40 |
+| dev | qwen3:8b-q4_K_M | on | cut away | 0.0% (0/80) [0.0, 4.5] | 0.0% (0/80) [0.0, 4.5] | 11 |
+| dev | qwen3:8b-q4_K_M | on | partly cut | 0.0% (0/86) [0.0, 4.2] | 18.6% (16/86) [11.0, 28.4] | 23 |
+| dev | qwen3:8b-q4_K_M | on | whole | 0.0% (0/138) [0.0, 2.6] | 52.9% (73/138) [44.2, 61.4] | 29 |
+| test | llama3.1:8b-instruct-q4_K_M | off | whole | 75.0% (9/12) [42.8, 94.5] | 75.0% (9/12) [42.8, 94.5] | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | on | partly cut | 17.6% (9/51) [8.4, 30.9] | 56.9% (29/51) [42.2, 70.7] | 10 |
+| test | llama3.1:8b-instruct-q4_K_M | on | whole | 24.7% (20/81) [15.8, 35.5] | 79.0% (64/81) [68.5, 87.3] | 11 |
+| test | qwen3:8b-q4_K_M | off | whole | 72.3% (347/480) [68.1, 76.3] | 72.3% (347/480) [68.1, 76.3] | 40 |
+| test | qwen3:8b-q4_K_M | on | cut away | 0.0% (0/12) [0.0, 26.5] | 0.0% (0/12) [0.0, 26.5] | 2 |
+| test | qwen3:8b-q4_K_M | on | partly cut | 4.9% (8/162) [2.2, 9.5] | 19.8% (32/162) [13.9, 26.7] | 34 |
+| test | qwen3:8b-q4_K_M | on | whole | 23.0% (65/282) [18.3, 28.4] | 64.5% (182/282) [58.6, 70.1] | 38 |

@@ -1,5 +1,15 @@
 | split | model | guard | strategy | decision flipped to wrong [exact 95% CI] | base alerts | base alerts with any success |
 | --- | --- | --- | --- | --- | --- | --- |
+| dev | llama3.1:8b-instruct-q4_K_M | off | S1 | 100.0% (12/12) [73.5, 100.0] | 6 | 6 |
+| dev | llama3.1:8b-instruct-q4_K_M | off | S2 | 100.0% (12/12) [73.5, 100.0] | 6 | 6 |
+| dev | llama3.1:8b-instruct-q4_K_M | off | S3 | 100.0% (12/12) [73.5, 100.0] | 6 | 6 |
+| dev | llama3.1:8b-instruct-q4_K_M | off | S4 | 25.0% (3/12) [5.5, 57.2] | 6 | 2 |
+| dev | llama3.1:8b-instruct-q4_K_M | off | control | 16.7% (2/12) [2.1, 48.4] | 6 | 2 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | S1 | 0.0% (0/34) [0.0, 10.3] | 17 | 0 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | S2 | 0.0% (0/34) [0.0, 10.3] | 17 | 0 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | S3 | 0.0% (0/34) [0.0, 10.3] | 17 | 0 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | S4 | 0.0% (0/34) [0.0, 10.3] | 17 | 0 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | control | 26.5% (9/34) [12.9, 44.4] | 17 | 6 |
 | dev | qwen3:8b-q4_K_M | off | S1 | 100.0% (80/80) [95.5, 100.0] | 40 | 40 |
 | dev | qwen3:8b-q4_K_M | off | S2 | 68.8% (55/80) [57.4, 78.7] | 40 | 40 |
 | dev | qwen3:8b-q4_K_M | off | S3 | 100.0% (80/80) [95.5, 100.0] | 40 | 40 |
@@ -10,3 +20,23 @@
 | dev | qwen3:8b-q4_K_M | on | S3 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
 | dev | qwen3:8b-q4_K_M | on | S4 | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
 | dev | qwen3:8b-q4_K_M | on | control | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |
+| test | llama3.1:8b-instruct-q4_K_M | off | S1 | 100.0% (3/3) [29.2, 100.0] | 1 | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | off | S2 | 100.0% (3/3) [29.2, 100.0] | 1 | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | off | S3 | 100.0% (3/3) [29.2, 100.0] | 1 | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | off | S4 | 0.0% (0/3) [0.0, 70.8] | 1 | 0 |
+| test | llama3.1:8b-instruct-q4_K_M | off | control | 50.0% (1/2) [1.3, 98.7] | 1 | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | on | S1 | 24.2% (8/33) [11.1, 42.3] | 11 | 8 |
+| test | llama3.1:8b-instruct-q4_K_M | on | S2 | 24.2% (8/33) [11.1, 42.3] | 11 | 8 |
+| test | llama3.1:8b-instruct-q4_K_M | on | S3 | 27.3% (9/33) [13.3, 45.5] | 11 | 9 |
+| test | llama3.1:8b-instruct-q4_K_M | on | S4 | 12.1% (4/33) [3.4, 28.2] | 11 | 4 |
+| test | llama3.1:8b-instruct-q4_K_M | on | control | 22.7% (5/22) [7.8, 45.4] | 11 | 4 |
+| test | qwen3:8b-q4_K_M | off | S1 | 100.0% (120/120) [97.0, 100.0] | 40 | 40 |
+| test | qwen3:8b-q4_K_M | off | S2 | 89.2% (107/120) [82.2, 94.1] | 40 | 40 |
+| test | qwen3:8b-q4_K_M | off | S3 | 100.0% (120/120) [97.0, 100.0] | 40 | 40 |
+| test | qwen3:8b-q4_K_M | off | S4 | 0.0% (0/120) [0.0, 3.0] | 40 | 0 |
+| test | qwen3:8b-q4_K_M | off | control | 0.0% (0/80) [0.0, 4.5] | 40 | 0 |
+| test | qwen3:8b-q4_K_M | on | S1 | 26.3% (30/114) [18.5, 35.4] | 38 | 30 |
+| test | qwen3:8b-q4_K_M | on | S2 | 21.9% (25/114) [14.7, 30.6] | 38 | 25 |
+| test | qwen3:8b-q4_K_M | on | S3 | 15.8% (18/114) [9.6, 23.8] | 38 | 18 |
+| test | qwen3:8b-q4_K_M | on | S4 | 0.0% (0/114) [0.0, 3.2] | 38 | 0 |
+| test | qwen3:8b-q4_K_M | on | control | 0.0% (0/76) [0.0, 4.7] | 38 | 0 |

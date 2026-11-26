@@ -1,5 +1,14 @@
 | split | model | guard | field | decision flipped to wrong [exact 95% CI] | base alerts | base alerts with any success |
 | --- | --- | --- | --- | --- | --- | --- |
+| dev | llama3.1:8b-instruct-q4_K_M | off | data.command | 83.3% (10/12) [51.6, 97.9] | 3 | 3 |
+| dev | llama3.1:8b-instruct-q4_K_M | off | data.srcuser | 75.0% (9/12) [42.8, 94.5] | 3 | 3 |
+| dev | llama3.1:8b-instruct-q4_K_M | off | data.url | 75.0% (3/4) [19.4, 99.4] | 1 | 1 |
+| dev | llama3.1:8b-instruct-q4_K_M | off | full_log | 85.0% (17/20) [62.1, 96.8] | 5 | 5 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | data.command | 0.0% (0/24) [0.0, 14.2] | 6 | 0 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | data.srcuser | 0.0% (0/36) [0.0, 9.7] | 9 | 0 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | data.url | 0.0% (0/16) [0.0, 20.6] | 4 | 0 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | data.user_agent | 0.0% (0/4) [0.0, 60.2] | 1 | 0 |
+| dev | llama3.1:8b-instruct-q4_K_M | on | full_log | 0.0% (0/56) [0.0, 6.4] | 14 | 0 |
 | dev | qwen3:8b-q4_K_M | off | data.command | 62.5% (20/32) [43.7, 78.9] | 8 | 8 |
 | dev | qwen3:8b-q4_K_M | off | data.srcuser | 73.3% (44/60) [60.3, 83.9] | 15 | 15 |
 | dev | qwen3:8b-q4_K_M | off | data.url | 70.8% (17/24) [48.9, 87.4] | 6 | 6 |
@@ -10,3 +19,20 @@
 | dev | qwen3:8b-q4_K_M | on | data.url | 0.0% (0/24) [0.0, 14.2] | 6 | 0 |
 | dev | qwen3:8b-q4_K_M | on | data.user_agent | 0.0% (0/8) [0.0, 36.9] | 2 | 0 |
 | dev | qwen3:8b-q4_K_M | on | full_log | 0.0% (0/180) [0.0, 2.0] | 34 | 0 |
+| test | llama3.1:8b-instruct-q4_K_M | off | data.command | 75.0% (3/4) [19.4, 99.4] | 1 | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | off | data.srcuser | 75.0% (3/4) [19.4, 99.4] | 1 | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | off | full_log | 75.0% (3/4) [19.4, 99.4] | 1 | 1 |
+| test | llama3.1:8b-instruct-q4_K_M | on | data.command | 0.0% (0/8) [0.0, 36.9] | 2 | 0 |
+| test | llama3.1:8b-instruct-q4_K_M | on | data.srcuser | 20.5% (9/44) [9.8, 35.3] | 8 | 6 |
+| test | llama3.1:8b-instruct-q4_K_M | on | data.url | 25.0% (4/16) [7.3, 52.4] | 3 | 2 |
+| test | llama3.1:8b-instruct-q4_K_M | on | data.user_agent | 0.0% (0/4) [0.0, 60.2] | 1 | 0 |
+| test | llama3.1:8b-instruct-q4_K_M | on | full_log | 26.7% (16/60) [16.1, 39.7] | 11 | 9 |
+| test | qwen3:8b-q4_K_M | off | data.command | 71.4% (20/28) [51.3, 86.8] | 7 | 7 |
+| test | qwen3:8b-q4_K_M | off | data.srcuser | 70.8% (75/106) [61.1, 79.2] | 20 | 20 |
+| test | qwen3:8b-q4_K_M | off | data.url | 72.6% (77/106) [63.1, 80.9] | 18 | 18 |
+| test | qwen3:8b-q4_K_M | off | data.user_agent | 75.0% (3/4) [19.4, 99.4] | 1 | 1 |
+| test | qwen3:8b-q4_K_M | off | full_log | 72.9% (172/236) [66.7, 78.4] | 40 | 40 |
+| test | qwen3:8b-q4_K_M | on | data.command | 21.4% (6/28) [8.3, 41.0] | 7 | 2 |
+| test | qwen3:8b-q4_K_M | on | data.srcuser | 17.0% (18/106) [10.4, 25.5] | 20 | 14 |
+| test | qwen3:8b-q4_K_M | on | data.url | 23.5% (24/102) [15.7, 33.0] | 17 | 17 |
+| test | qwen3:8b-q4_K_M | on | full_log | 11.4% (25/220) [7.5, 16.3] | 38 | 17 |

@@ -349,3 +349,22 @@ def test_app_evidence_and_runs(tmp_path):
         (tmp_path / f"{name}.meta.json").write_text("{}", encoding="utf-8")
     (tmp_path / "dev_clean_guard-on_primary.jsonl").write_text("", encoding="utf-8")     # unfinished: no meta
     assert app.finished_runs(tmp_path) == ["dev_clean_guard-off_primary"]
+
+
+def test_payload_seen_and_model_own_verdict():
+    from src import evaluate as ev
+    case = {"wazuh": {"full_log": "x" * 10 + " PAY"}, "field": "full_log", "payload": "PAY"}
+    assert ev.payload_seen(case, 100) == "whole"
+    assert ev.payload_seen(case, 12) == "partly cut"
+    assert ev.payload_seen(case, 11) == "cut away"
+    meta = {"model_tag": "m"}
+    clean = {"meta": meta, "rows": [{"id": "t1", "base_id": "t1", "label": "tp", "final_verdict": "true_positive"}]}
+    inj = {"meta": meta, "rows": [{"id": "x1", "base_id": "t1", "label": "tp", "strategy": "S1", "variant": "a",
+                                   "field": "full_log", "provenance": "public", "canary": None, "guard_flags": ["f"],
+                                   "rationale": "", "model_verdict": "false_positive", "final_verdict": "needs_human"}]}
+    df = ev.asr_records({"dev_clean_guard-on_primary": clean, "dev_inject_guard-on_primary": inj},
+                        {("x1", "on"): "whole"})
+    row = ev.table_asr_inside(df)[0]
+    assert row["payload in model input"] == "whole"
+    assert row["final verdict flipped [exact 95% CI]"].startswith("0.0% (0/1)")
+    assert row["model's own verdict flipped [exact 95% CI]"].startswith("100.0% (1/1)")
